@@ -1,0 +1,11 @@
+name = luggage_admin
+description = Administration views for luggage
+core = 7.x
+package = Luggage
+version = 7.x-1.0
+dependencies[] = views
+dependencies[] = views_bulk_operations
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = luggage
+features_exclude[dependencies][ctools] = ctools
