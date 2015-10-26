@@ -5,3 +5,40 @@
  */
 
 include_once 'luggage_admin.features.inc';
+
+/*
+ * Implements hook_form_alter()
+ */
+function luggage_admin_form_alter(&$form, &$form_state, $form_id) {
+
+}
+
+function luggage_admin_form_views_exposed_form_alter(&$form, &$form_state) {
+
+  if ($form_state['view']->current_display == "luggage_content") {
+
+    global $user;
+
+    // hide the author field if the currently logged in user doesn't have
+    // administer content permissions
+    if (!user_access('administer content')) {
+      $form['name']['#disabled'] = TRUE;
+      $form['name']['#default_value'] = $user->name;
+    }
+
+    // $form['name']['#default_value'] does not work for some reason with $_GET forms.
+    // see https://www.drupal.org/node/635242
+
+    if (isset($_GET['name'])) {
+      // if name is defined, and the user doesn't have content editor, reset
+      // name to the current user
+      if (!user_access('administer content')) {
+        $form_state['inpu']['name'] = $user->name;
+      }
+    }
+    else {
+      // if name is not defined, set the default to the currently logged in user
+      $form_state['input']['name'] = $user->name;
+    }
+  }
+}
