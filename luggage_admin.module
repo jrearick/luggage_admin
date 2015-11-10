@@ -13,32 +13,58 @@ function luggage_admin_form_alter(&$form, &$form_state, $form_id) {
 
 }
 
+/*
+ * Implements hook_form_FORMID_alter()
+ */
 function luggage_admin_form_views_exposed_form_alter(&$form, &$form_state) {
 
   if ($form_state['view']->current_display == "luggage_content") {
 
     global $user;
 
-    // hide the author field if the currently logged in user doesn't have
-    // administer content permissions
+    // If the current user doesn't have administer content permissions.
     if (!user_access('administer content')) {
+      // Disable the author field and make it default to their own content.
       $form['name']['#disabled'] = TRUE;
       $form['name']['#default_value'] = $user->name;
     }
 
-    // $form['name']['#default_value'] does not work for some reason with $_GET forms.
-    // see https://www.drupal.org/node/635242
+    // $form['name']['#default_value'] does not work for some reason with
+    // $_GET forms.
+    // See https://www.drupal.org/node/635242
 
     if (isset($_GET['name'])) {
-      // if name is defined, and the user doesn't have content editor, reset
-      // name to the current user
+      // If name is defined, and the user doesn't have content editor, reset
+      // name to the current user.
       if (!user_access('administer content')) {
-        $form_state['inpu']['name'] = $user->name;
+        $form_state['input']['name'] = $user->name;
       }
     }
     else {
-      // if name is not defined, set the default to the currently logged in user
+      // If name is not defined, set the default to the current user.
       $form_state['input']['name'] = $user->name;
+    }
+  }
+}
+
+
+/*
+ * Implements hook_views_pre_render()
+ */
+function luggage_admin_views_pre_render(&$view) {
+  // If the user has administer content permission add a View All Content link
+  // to the view's header.
+  if ($view->name == "luggage" && $view->current_display == "luggage_content") {
+    if (user_access('administer content')) {
+      $path = $view->display_handler->options['path'];
+      $path_query = array(
+        'Published' => "All",
+        'type' => "All",
+        'title' => "",
+        'name' => "",
+      );
+      $url = url($path, array('query' => $path_query));
+      $view->header['area']->options['content'] = t('<a href="@url">View All Content</a>', array('@url' => $url ));
     }
   }
 }
