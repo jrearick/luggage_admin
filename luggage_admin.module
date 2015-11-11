@@ -7,13 +7,6 @@
 include_once 'luggage_admin.features.inc';
 
 /*
- * Implements hook_form_alter()
- */
-function luggage_admin_form_alter(&$form, &$form_state, $form_id) {
-
-}
-
-/*
  * Implements hook_form_FORMID_alter()
  */
 function luggage_admin_form_views_exposed_form_alter(&$form, &$form_state) {
@@ -52,8 +45,12 @@ function luggage_admin_form_views_exposed_form_alter(&$form, &$form_state) {
  * Implements hook_views_pre_render()
  */
 function luggage_admin_views_pre_render(&$view) {
-  // If the user has administer content permission add a View All Content link
-  // to the view's header.
+  // Add an 'Add Content' link to the header.
+  $view->header['area']->options['content'] .= t('<a href="@url">Add Content</a><br />', array('@url' => 'node/add'));
+
+  // If the user has administer content permission add an
+  // 'Administer All Content' and 'Administer My Content' links to the view's
+  // header.
   if ($view->name == "luggage" && $view->current_display == "luggage_content") {
     if (user_access('administer content')) {
       $path = $view->display_handler->options['path'];
@@ -64,7 +61,8 @@ function luggage_admin_views_pre_render(&$view) {
         'name' => "",
       );
       $url = url($path, array('query' => $path_query));
-      $view->header['area']->options['content'] = t('<a href="@url">View All Content</a>', array('@url' => $url ));
+      $view->header['area']->options['content'] .= t('<a href="@url">Administer All Content</a><br />', array('@url' => $url));
+      $view->header['area']->options['content'] .= t('<a href="@url">Administer My Content</a>', array('@url' => $path));
     }
   }
 }
