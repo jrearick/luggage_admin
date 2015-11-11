@@ -197,7 +197,7 @@ function luggage_admin_views_default_views() {
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
   $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['label'] = 'Operations';
-  $handler->display->display_options['fields']['nothing']['alter']['text'] = '[edit_node] &nbsp;&nbsp;[delete_node]';
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = '[edit_node]&nbsp;&nbsp;&nbsp;[delete_node]';
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
@@ -267,21 +267,27 @@ function luggage_admin_views_default_views() {
   $handler->display->display_options['filters']['name']['table'] = 'users';
   $handler->display->display_options['filters']['name']['field'] = 'name';
   $handler->display->display_options['filters']['name']['relationship'] = 'uid';
-  $handler->display->display_options['filters']['name']['operator'] = 'contains';
   $handler->display->display_options['filters']['name']['exposed'] = TRUE;
   $handler->display->display_options['filters']['name']['expose']['operator_id'] = 'name_op';
   $handler->display->display_options['filters']['name']['expose']['label'] = 'Author';
   $handler->display->display_options['filters']['name']['expose']['operator'] = 'name_op';
   $handler->display->display_options['filters']['name']['expose']['identifier'] = 'name';
-  $handler->display->display_options['filters']['name']['expose']['remember'] = TRUE;
   $handler->display->display_options['filters']['name']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
-    3 => 0,
-    6 => 0,
-    5 => 0,
     4 => 0,
+    5 => 0,
+    8 => 0,
+    13 => 0,
+    15 => 0,
+    3 => 0,
+    14 => 0,
+    9 => 0,
+    6 => 0,
+    11 => 0,
+    10 => 0,
     7 => 0,
+    12 => 0,
   );
 
   /* Display: Page */
